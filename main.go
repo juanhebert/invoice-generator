@@ -87,17 +87,19 @@ func main() {
 			log.Print(err)
 			return
 		}
-		if resp.StatusCode != 200 {
-			log.Printf("Call to Gotenberg faild with status: %v.", resp.Status)
-			w.WriteHeader(resp.StatusCode)
-			return
-		}
 
 		// Return PDF
 		respBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			log.Print("POST /invoice: could not read response from Gotenberg.")
 			log.Print(err)
+			return
+		}
+
+		if resp.StatusCode != 200 {
+			log.Printf("Call to Gotenberg faild with status: %v.", resp.Status)
+			log.Print(string(respBody))
+			w.WriteHeader(resp.StatusCode)
 			return
 		}
 
